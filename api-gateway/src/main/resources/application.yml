@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8765
 
 spring:
   application:
@@ -8,7 +8,7 @@ spring:
     gateway:
       discovery:
         locator:
-          enabled: true  # Enables automatic discovery of microservices in Eureka
+          enabled: true
           lower-case-service-id: true
       routes:
         - id: booking-service

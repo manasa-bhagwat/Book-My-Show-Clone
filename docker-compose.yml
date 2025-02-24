@@ -15,8 +15,10 @@ services:
       timeout: 5s
       retries: 5
       start_period: 15s
-      
-    api-gateway:
+    networks:
+      - app-network
+
+  api-gateway:
     image: api-gateway
     container_name: api-gateway
     build: ./api-gateway
@@ -28,19 +30,19 @@ services:
       payment-service:
         condition: service_started
     ports:
-      - "8080:8080"
+      - "8765:8765"
     environment:
+      SPRING_PROFILES_ACTIVE: docker
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-service:8761/eureka/
       SPRING_APPLICATION_NAME: api-gateway
     networks:
       - app-network
 
-
   bookingdb:
     image: postgres:15
     container_name: bookingdb
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d bookings"]
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "bookings"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -51,12 +53,14 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
       POSTGRES_DB: bookings
+    networks:
+      - app-network
 
   paymentdb:
     image: postgres:15
     container_name: paymentdb
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d payments"]
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "payments"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -67,6 +71,8 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
       POSTGRES_DB: payments
+    networks:
+      - app-network
 
   booking-service:
     image: booking-service
@@ -80,11 +86,14 @@ services:
     ports:
       - "9090:9090"
     environment:
+      SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://bookingdb:5432/bookings
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-service:8761/eureka/
       SPRING_APPLICATION_NAME: booking-service
+    networks:
+      - app-network
 
   payment-service:
     image: payment-service
@@ -98,8 +107,15 @@ services:
     ports:
       - "9091:9091"
     environment:
+      SPRING_PROFILES_ACTIVE: docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://paymentdb:5432/payments
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-service:8761/eureka/
       SPRING_APPLICATION_NAME: payment-service
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
