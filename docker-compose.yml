@@ -1,6 +1,21 @@
 version: "3.8"
 
 services:
+  eureka-service:
+    image: openjdk:17
+    container_name: eureka-service
+    build: ./eureka-service-registry
+    ports:
+      - "8761:8761"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
   bookingdb:
     image: postgres:15
     container_name: bookingdb
@@ -11,7 +26,7 @@ services:
       retries: 5
       start_period: 10s
     ports:
-      - "5433:5432"  # Expose PostgreSQL for local testing
+      - "5433:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
@@ -27,7 +42,7 @@ services:
       retries: 5
       start_period: 10s
     ports:
-      - "5434:5432"  # Expose PostgreSQL for local testing
+      - "5434:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: root
@@ -38,6 +53,8 @@ services:
     container_name: booking-service
     build: ./booking-service
     depends_on:
+      eureka-service:
+        condition: service_healthy
       bookingdb:
         condition: service_healthy
     ports:
@@ -46,12 +63,16 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://bookingdb:5432/bookings
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-service:8761/eureka/
+      SPRING_APPLICATION_NAME: booking-service
 
   payment-service:
     image: payment-service
     container_name: payment-service
     build: ./payment-service
     depends_on:
+      eureka-service:
+        condition: service_healthy
       paymentdb:
         condition: service_healthy
     ports:
@@ -60,3 +81,5 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://paymentdb:5432/payments
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-service:8761/eureka/
+      SPRING_APPLICATION_NAME: payment-service
