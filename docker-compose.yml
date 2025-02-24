@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  bookingdb:
+    image: postgres:15
+    container_name: bookingdb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bookings"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    ports:
+      - "5433:5432"  # Expose PostgreSQL for local testing
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: bookings
+
+  paymentdb:
+    image: postgres:15
+    container_name: paymentdb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d payments"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    ports:
+      - "5434:5432"  # Expose PostgreSQL for local testing
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: payments
+
+  booking-service:
+    image: booking-service
+    container_name: booking-service
+    build: ./booking-service
+    depends_on:
+      bookingdb:
+        condition: service_healthy
+    ports:
+      - "9090:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://bookingdb:5432/bookings
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
+
+  payment-service:
+    image: payment-service
+    container_name: payment-service
+    build: ./payment-service
+    depends_on:
+      paymentdb:
+        condition: service_healthy
+    ports:
+      - "9091:9091"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://paymentdb:5432/payments
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
