@@ -25,6 +25,7 @@ public class PaymentEntity {
     @Column(name = "booking_id")
     private UUID bookingId;
     @Column(name = "payment_status")
+    @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
     @Column(name = "payment_amount")
     private Double paymentAmount;

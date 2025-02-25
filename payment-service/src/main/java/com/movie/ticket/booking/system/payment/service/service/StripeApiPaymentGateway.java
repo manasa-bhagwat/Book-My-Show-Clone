@@ -25,7 +25,7 @@ public class StripeApiPaymentGateway {
         Stripe.apiKey = secretKey;
     }
 
-    public BookingDTO processPayment(BookingDTO bookingDTO) {
+    public BookingDTO makePayment(BookingDTO bookingDTO) {
         Map<String, Object> chargeParams = new HashMap<>();
         chargeParams.put("amount", (int) (bookingDTO.getBookingAmount() * 100));
         chargeParams.put("currency", "inr");

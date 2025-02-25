@@ -51,6 +51,10 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
@@ -97,7 +101,9 @@
 							<version>1.18.30</version> <!-- Version explicitly defined -->
 						</path>
 					</annotationProcessorPaths>
-				</configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

@@ -1,9 +1,15 @@
 package com.movie.ticket.booking.system.service.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.movie.ticket.booking.system.service.dto.BookingDTO;
+import com.movie.ticket.booking.system.service.exception.BookingsException;
 
+import java.util.UUID;
 
 public interface BookingService {
 
-    public BookingDTO createBooking(BookingDTO bookingDTO);
+    public BookingDTO createBooking(BookingDTO bookingDTO) throws JsonProcessingException;
+    public BookingDTO getBookingDetails(UUID bookingDTO) throws BookingsException;
+    public void processFinalBooking(BookingDTO bookingDTO) throws BookingsException;
+
 }

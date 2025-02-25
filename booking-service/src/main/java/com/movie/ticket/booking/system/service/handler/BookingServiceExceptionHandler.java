@@ -1,6 +1,7 @@
 package com.movie.ticket.booking.system.service.handler;
 
 import com.movie.ticket.booking.system.service.dto.ResponseDTO;
+import com.movie.ticket.booking.system.service.exception.BookingsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,5 +71,23 @@ public class BookingServiceExceptionHandler {
                         .build()
         );
     }
+
+    @ExceptionHandler(BookingsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ResponseDTO> handleBookingsException(BookingsException exception) {
+        log.error("BookingsException occurred: {}", exception.getMessage(), exception);
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        return ResponseEntity.status(status).body(
+                ResponseDTO.builder()
+                        .errorCode(status.value())
+                        .errorStatusCodeDescription(STATUS_CODE_DESCRIPTIONS.get(status))
+                        .errorMessages(List.of(exception.getMessage()))
+                        .build()
+        );
+    }
+
+
 
 }
