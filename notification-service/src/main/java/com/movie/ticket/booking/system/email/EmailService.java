@@ -1,30 +1,39 @@
 package com.movie.ticket.booking.system.email;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    private final JavaMailSender javaMailSender;
 
-    public void sendEmail(String to, String subject, String text) {
-        try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(to);
-            message.setSubject(subject);
-            message.setText(text);
-            mailSender.send(message);
-            log.info("Email sent successfully to {}", to);
-
-        } catch (Exception e) {
-            log.error("Failed to send email to {}: {}", to, e.getMessage());
-        }
+    public EmailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
     }
 
+    public void sendEmail(String recipientEmail, String subject, String htmlContent) {
+        try {
+            if (recipientEmail == null || recipientEmail.trim().isEmpty()) {
+                log.error("Recipient email is null or empty, skipping email send.");
+                return;
+            }
+
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setTo(recipientEmail);
+            helper.setSubject(subject);
+            helper.setText(htmlContent, true);
+
+            javaMailSender.send(message);
+            log.info("Email sent successfully to {}", recipientEmail);
+        } catch (Exception e) {
+            log.error("Failed to send email to {}: {}", recipientEmail, e.getMessage(), e);
+        }
+    }
 }

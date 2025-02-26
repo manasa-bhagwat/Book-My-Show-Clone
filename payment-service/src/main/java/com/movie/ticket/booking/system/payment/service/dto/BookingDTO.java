@@ -24,6 +24,7 @@ public class BookingDTO {
     UUID bookingId;
     private String userId;
     private Integer movieId;
+    private String emailId;
     private List<String> seatsSelected;
     private LocalDate showDate;
     private LocalTime showTime;

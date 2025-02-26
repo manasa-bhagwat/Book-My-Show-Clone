@@ -31,6 +31,7 @@ public class PaymentServiceImpl implements PaymentService {
         PaymentEntity paymentEntity = PaymentEntity.builder()
                 .paymentStatus(PaymentStatus.PENDING)
                 .bookingId(bookingDTO.getBookingId())
+                .emailId(bookingDTO.getEmailId())
                 .paymentAmount(bookingDTO.getBookingAmount())
                 .build();
         this.paymentRepo.save(paymentEntity);

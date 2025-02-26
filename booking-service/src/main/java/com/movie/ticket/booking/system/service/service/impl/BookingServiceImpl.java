@@ -37,6 +37,7 @@ public class BookingServiceImpl implements BookingService {
         BookingEntity bookingEntity = BookingEntity.builder()
                 .userId(bookingDTO.getUserId())
                 .movieId(bookingDTO.getMovieId())
+                .emailId(bookingDTO.getEmailId())
                 .seatsSelected(bookingDTO.getSeatsSelected())
                 .showDate(bookingDTO.getShowDate())
                 .showTime(bookingDTO.getShowTime())
@@ -62,6 +63,7 @@ public class BookingServiceImpl implements BookingService {
 
         return BookingDTO.builder()
                 .bookingId(entity.getBookingId())
+                .emailId(entity.getEmailId())
                 .bookingAmount(entity.getBookingAmount())
                 .bookingStatus(entity.getBookingStatus())
                 .movieId(entity.getMovieId())

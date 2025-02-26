@@ -30,6 +30,9 @@ public class BookingDTO {
     @Positive(message = "Please provide a valid movie id.")
     private Integer movieId;
 
+    @NotNull(message = "Please provide a email id.")
+    private String emailId;
+
     @NotNull(message = "Please select at least 1 seat to make a booking.")
     @Size(min = 1, message = "Please select at least 1 seat to make a booking.")
     private List<@NotBlank(message = "Seat number cannot be blank.") String> seatsSelected;

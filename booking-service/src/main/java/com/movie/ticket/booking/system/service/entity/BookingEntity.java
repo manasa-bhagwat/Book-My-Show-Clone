@@ -26,6 +26,8 @@ public class BookingEntity {
     UUID bookingId;
     @Column(name = "user_id")
     String userId;
+    @Column(name = "email_id")
+    String emailId;
     @Column(name = "movie_id")
     Integer movieId;
     @ElementCollection

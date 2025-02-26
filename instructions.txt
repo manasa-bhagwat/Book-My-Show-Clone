@@ -22,6 +22,7 @@ JSON request body:
 {
   "userId": "Ganapathi",
   "movieId": 11,
+  "emailId":"maansaflaunts@gmail.com",
   "seatsSelected": ["A1", "A2", "A3"],
   "showDate": "2025-03-01",
   "showTime": "01:11",
@@ -32,6 +33,7 @@ Response:
 {	
 	"bookingId":"315bc6cb-435d-4e78-8dda-ee85c7363577",
 	"userId":"Ganapathi",	"movieId":11,
+	"emailId":"maansaflaunts@gmail.com",
 	"seatsSelected":["A1","A2","A3"],
 	"showDate":"2025-03-01",
 	"showTime":"01:11:00",
@@ -44,6 +46,7 @@ Response:
 {
 	"bookingId":"315bc6cb-435d-4e78-8dda-ee85c7363577",
 	"userId":"Ganapathi",
+	"emailId":"maansaflaunts@gmail.com",
 	"movieId":11,
 	"seatsSelected":["A1","A2","A3"],
 	"showDate":"2025-03-01",
