@@ -43,7 +43,7 @@ public class BookingServiceExceptionHandler {
         errorMessages.addAll(exception.getBindingResult().getGlobalErrors()
                 .stream()
                 .map(ObjectError::getDefaultMessage)
-                .collect(Collectors.toList()));
+                .toList());
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
 

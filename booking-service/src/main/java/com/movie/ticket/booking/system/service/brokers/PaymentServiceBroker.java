@@ -1,5 +1,5 @@
-//package com.movie.ticket.booking.system.service.brokers;
-//
+package com.movie.ticket.booking.system.service.brokers;
+
 //import com.movie.ticket.booking.system.service.dto.BookingDTO;
 //import org.springframework.cloud.openfeign.FeignClient;
 //import org.springframework.web.bind.annotation.PostMapping;
